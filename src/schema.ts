@@ -54,7 +54,7 @@ export const invite = {
         anyOf: [
           { $ref: 'http://graasp.org/#/definitions/error' },
           { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
-        ]
+        ],
       },
     },
   },

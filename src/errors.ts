@@ -22,9 +22,25 @@ export class GraaspInvitationError implements GraaspError {
 export class DuplicateInvitationError extends GraaspInvitationError {
   constructor(data?: unknown) {
     super(
-      { code: 'GPINVERR002', statusCode: StatusCodes.CONFLICT, message: 'Invitation already exists or has a different membership for item and email pair' },
+      {
+        code: 'GPINVERR001',
+        statusCode: StatusCodes.CONFLICT,
+        message: 'Invitation already exists or has a different membership for item and email pair',
+      },
       data,
     );
   }
 }
 
+export class MemberAlreadyExistForEmailError extends GraaspInvitationError {
+  constructor(data?: unknown) {
+    super(
+      {
+        code: 'GPINVERR002',
+        statusCode: StatusCodes.CONFLICT,
+        message: 'This email is already associated with a member',
+      },
+      data,
+    );
+  }
+}

@@ -1,4 +1,11 @@
-import { Actor, PermissionLevel, ItemMembershipTaskManager, ItemTaskManager, Task } from 'graasp';
+import {
+  Actor,
+  PermissionLevel,
+  ItemMembershipTaskManager,
+  ItemTaskManager,
+  Task,
+  MemberService,
+} from 'graasp';
 import { InvitationService } from './db-service';
 import CreateInvitationTask, {
   CreateInvitationTaskInputType,
@@ -14,15 +21,18 @@ class InvitationTaskManager {
   invitationService: InvitationService;
   itemTaskManager: ItemTaskManager;
   itemMembershipTaskManager: ItemMembershipTaskManager;
+  memberService: MemberService;
 
   constructor(
     invitationService: InvitationService,
     itemTaskManager: ItemTaskManager,
     itemMembershipTaskManager: ItemMembershipTaskManager,
+    memberService: MemberService,
   ) {
     this.invitationService = invitationService;
     this.itemTaskManager = itemTaskManager;
     this.itemMembershipTaskManager = itemMembershipTaskManager;
+    this.memberService = memberService;
   }
 
   getCreateInvitationTask(): string {
@@ -39,7 +49,7 @@ class InvitationTaskManager {
       item: t1.result,
       validatePermission: PermissionLevel.Write,
     });
-    const t3 = new CreateInvitationTask(member, this.invitationService, data);
+    const t3 = new CreateInvitationTask(member, this.invitationService, this.memberService, data);
     return [t1, t2, t3];
   }
 

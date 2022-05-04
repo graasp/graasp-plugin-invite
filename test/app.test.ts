@@ -69,7 +69,7 @@ describe('Invitation Plugin', () => {
     });
 
     it('Return errors correctly', async () => {
-      const resultWithError = [...FIXTURES_INVITATIONS, new MockError()]
+      const resultWithError = [...FIXTURES_INVITATIONS, new MockError()];
       mockCreateTaskSequence(runner, item, resultWithError);
 
       const app = await build({

@@ -17,7 +17,7 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
     taskRunner: runner,
     items: { taskManager: iTM },
     itemMemberships: { taskManager: iMTM },
-    members: { taskManager: mTM },
+    members: { taskManager: mTM, dbService: mS },
     mailer,
   } = fastify;
 
@@ -26,7 +26,7 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
   }
 
   const dbService = new InvitationService();
-  const taskManager = new InvitationTaskManager(dbService, iTM, iMTM);
+  const taskManager = new InvitationTaskManager(dbService, iTM, iMTM, mS);
 
   fastify.addSchema(definitions);
 

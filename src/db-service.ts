@@ -21,9 +21,9 @@ export class InvitationService {
       !Array.isArray(c)
         ? sql.identifier([c])
         : sql.join(
-          c.map((cwa) => sql.identifier([cwa])),
-          sql` AS `,
-        ),
+            c.map((cwa) => sql.identifier([cwa])),
+            sql` AS `,
+          ),
     ),
     sql`, `,
   );
@@ -79,7 +79,10 @@ export class InvitationService {
    * @param id Item id
    * @param transactionHandler Database transaction handler
    */
-  async getForMember(email: string, transactionHandler: TrxHandler): Promise<readonly Invitation[]> {
+  async getForMember(
+    email: string,
+    transactionHandler: TrxHandler,
+  ): Promise<readonly Invitation[]> {
     return transactionHandler
       .query<Invitation>(
         sql`
