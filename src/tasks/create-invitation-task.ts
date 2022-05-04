@@ -2,21 +2,22 @@ import { Actor, DatabaseTransactionHandler } from 'graasp';
 import { BaseTask } from './base-task';
 import Invitation from '../interfaces/invitation';
 import { InvitationService } from '../db-service';
+import { BaseInvitation } from '../base-invitation';
 
-export type CreateInvitationsTaskInputType = {
-  invitations?: Partial<Invitation>[];
+export type CreateInvitationTaskInputType = {
+  invitation?: Partial<Invitation>;
   itemId?: string;
 };
 
-class CreateInvitationsTask extends BaseTask<Actor, Invitation[]> {
+class CreateInvitationTask extends BaseTask<Actor, Invitation> {
   get name(): string {
-    return CreateInvitationsTask.name;
+    return CreateInvitationTask.name;
   }
 
-  input: CreateInvitationsTaskInputType;
-  getInput: () => CreateInvitationsTaskInputType;
+  input: CreateInvitationTaskInputType;
+  getInput: () => CreateInvitationTaskInputType;
 
-  constructor(actor: Actor, service: InvitationService, input?: CreateInvitationsTaskInputType) {
+  constructor(actor: Actor, service: InvitationService, input?: CreateInvitationTaskInputType) {
     super(actor, service);
     this.input = input ?? {};
   }
@@ -24,14 +25,16 @@ class CreateInvitationsTask extends BaseTask<Actor, Invitation[]> {
   async run(handler: DatabaseTransactionHandler): Promise<void> {
     this.status = 'RUNNING';
 
-    this._result = await Promise.all(
-      this.input.invitations?.map((inv) => {
-        return this.invitationService.create(inv, handler);
-      }),
+    const { invitation, itemId } = this.input;
+
+    const { permission, email, name } = invitation;
+    this._result = await this.invitationService.create(
+      new BaseInvitation(this.actor.id, itemId, { permission, name, email }),
+      handler,
     );
 
     this.status = 'OK';
   }
 }
 
-export default CreateInvitationsTask;
+export default CreateInvitationTask;

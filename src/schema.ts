@@ -5,7 +5,7 @@ export default {
       type: 'object',
       properties: {
         id: { type: 'string' },
-        memberId: { type: 'string' },
+        creator: { type: 'string' },
         itemId: { type: 'string' },
         email: { type: 'string' },
         name: { type: 'string' },

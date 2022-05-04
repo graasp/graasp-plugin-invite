@@ -51,17 +51,19 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
   );
 
   fastify.post<{ Params: IdParam; Body: { invitations: Partial<Invitation>[] } }>(
-    '/invite/:id',
+    '/:id/invite',
     {
       schema: invite,
     },
     async ({ member, body, params, log }) => {
       const { id: itemId } = params;
       const { invitations } = body;
-      const tasks = taskManager.createCreateTaskSequence(member, { itemId, invitations });
-      const completeInvitations = (await runner.runSingleSequence(tasks)) as Invitation[];
+      const sequences = invitations.map((invitation) =>
+        taskManager.createCreateTaskSequence(member, { itemId, invitation }),
+      );
+      const completeInvitations = (await runner.runMultipleSequences(sequences)) as Invitation[];
 
-      const item = tasks[0].result as Item;
+      const item = sequences[0][0].result as Item;
 
       log.debug('send invitation mails');
       completeInvitations.forEach((invitation) => {

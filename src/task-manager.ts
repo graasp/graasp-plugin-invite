@@ -1,7 +1,7 @@
 import { Actor, PermissionLevel, ItemMembershipTaskManager, ItemTaskManager, Task } from 'graasp';
 import { InvitationService } from './db-service';
-import CreateInvitationsTask, {
-  CreateInvitationsTaskInputType,
+import CreateInvitationTask, {
+  CreateInvitationTaskInputType,
 } from './tasks/create-invitation-task';
 import CreateMembershipFromInvitationTask, {
   CreateMembershipFromInvitationTaskInputType,
@@ -25,22 +25,21 @@ class InvitationTaskManager {
     this.itemMembershipTaskManager = itemMembershipTaskManager;
   }
 
-  getCreateInvitationsTask(): string {
-    return CreateInvitationsTask.name;
+  getCreateInvitationTask(): string {
+    return CreateInvitationTask.name;
   }
 
   createCreateTaskSequence(
     member: Actor,
-    data: CreateInvitationsTaskInputType,
+    data: CreateInvitationTaskInputType,
   ): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTask(member, data.itemId);
-
     const t2 = this.itemMembershipTaskManager.createGetMemberItemMembershipTask(member);
     t2.getInput = () => ({
       item: t1.result,
       validatePermission: PermissionLevel.Write,
     });
-    const t3 = new CreateInvitationsTask(member, this.invitationService, data);
+    const t3 = new CreateInvitationTask(member, this.invitationService, data);
     return [t1, t2, t3];
   }
 

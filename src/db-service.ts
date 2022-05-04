@@ -1,5 +1,6 @@
-import { ItemMembership, ItemMembershipService } from 'graasp';
+import { Actor, ItemMembership, ItemMembershipService } from 'graasp';
 import { sql, DatabaseTransactionConnection as TrxHandler } from 'slonik';
+import { BaseInvitation } from './base-invitation';
 import Invitation from './interfaces/invitation';
 
 /**
@@ -32,15 +33,12 @@ export class InvitationService {
    * @param invitation Invitation to create
    * @param transactionHandler Database transaction handler
    */
-  async create(
-    invitation: Partial<Invitation>,
-    transactionHandler: TrxHandler,
-  ): Promise<Invitation> {
+  async create(invitation: BaseInvitation, transactionHandler: TrxHandler): Promise<Invitation> {
     return transactionHandler
       .query<Invitation>(
         sql`
         INSERT INTO "invitation" (
-            "member_id",
+            "creator",
             "item_id",
             "email",
             "name",

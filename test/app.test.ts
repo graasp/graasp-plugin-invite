@@ -38,7 +38,7 @@ describe('Invitation Plugin', () => {
       });
       const response = await app.inject({
         method: 'POST',
-        url: `/invite/${FIXTURES_INVITATIONS[0].itemId}`,
+        url: `/${FIXTURES_INVITATIONS[0].itemId}/invite`,
         payload: { invitations: FIXTURES_INVITATIONS },
       });
 
@@ -60,7 +60,7 @@ describe('Invitation Plugin', () => {
       });
       const response = await app.inject({
         method: 'POST',
-        url: '/invite/invalid-id',
+        url: '/invalid-id/invite',
         payload: { invitations: FIXTURES_INVITATIONS },
       });
 
