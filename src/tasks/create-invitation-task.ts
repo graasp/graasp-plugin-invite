@@ -41,7 +41,7 @@ class CreateInvitationTask extends BaseTask<Actor, Invitation> {
 
     // check no member has this email already -> a membership should be created right away
     const members = await this.memberService.getMatching({ email }, handler);
-    if (members) {
+    if (members.length) {
       throw new MemberAlreadyExistForEmailError({ email });
     }
 
