@@ -26,6 +26,16 @@ export const mockCreateTaskSequence = (runner, item, data) => {
   });
 };
 
+export const mockGetTask = (runner, data) => {
+  jest
+    .spyOn(InvitationTaskManager.prototype, 'createGetTask')
+    .mockImplementation(() => new MockTask());
+
+  jest.spyOn(runner, 'runSingle').mockImplementation(async () => {
+    return data;
+  });
+};
+
 export const mockGetforItemTaskSequence = (runner, data) => {
   jest
     .spyOn(InvitationTaskManager.prototype, 'createGetforItemTaskSequence')

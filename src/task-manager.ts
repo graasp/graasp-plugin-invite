@@ -13,6 +13,7 @@ import CreateInvitationTask, {
 import CreateMembershipFromInvitationTask, {
   CreateMembershipFromInvitationTaskInputType,
 } from './tasks/create-membership-from-invitation-task';
+import GetInvitationTask, { GetInvitationTaskInputType } from './tasks/get-invitation-task';
 import GetInvitationsForItemTask, {
   GetInvitationsForItemTaskInputType,
 } from './tasks/get-invitations-for-item-task';
@@ -65,6 +66,10 @@ class InvitationTaskManager {
     });
     const t3 = new GetInvitationsForItemTask(member, this.invitationService, data);
     return [t1, t2, t3];
+  }
+
+  createGetTask(member: Actor, data: GetInvitationTaskInputType): Task<Actor, unknown> {
+    return new GetInvitationTask(member, this.invitationService, data);
   }
 
   createCreateMembershipFromInvitationTaskSequence(

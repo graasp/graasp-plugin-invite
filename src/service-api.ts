@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import { IdParam, Item, Member } from 'graasp';
 import mailerPlugin from 'graasp-mailer';
-import definitions, { getForItem, invite } from './schema';
+import definitions, { getById, getForItem, invite } from './schema';
 import InvitationTaskManager from './task-manager';
 import { InvitationService } from './db-service';
 import Invitation from './interfaces/invitation';
@@ -81,14 +81,25 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
     },
   );
 
+  // get all invitations for an item
   fastify.get<{ Params: IdParam }>(
     '/:id/invitations',
     { schema: getForItem },
     async ({ member, params }) => {
-      // return invitations for given item
       const { id: itemId } = params;
       const tasks = taskManager.createGetforItemTaskSequence(member, { itemId });
       return runner.runSingleSequence(tasks);
+    },
+  );
+
+  // get an invitation by id
+  fastify.get<{ Params: IdParam }>(
+    '/invitations/:id',
+    { schema: getById },
+    async ({ member, params }) => {
+      const { id } = params;
+      const task = taskManager.createGetTask(member, { id });
+      return runner.runSingle(task);
     },
   );
 };

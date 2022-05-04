@@ -69,3 +69,10 @@ export const getForItem = {
     },
   },
 };
+
+export const getById = {
+  params: { $ref: 'http://graasp.org/#/definitions/idParam' },
+  response: {
+    200: { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
+  },
+};

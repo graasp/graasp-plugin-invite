@@ -58,7 +58,24 @@ export class InvitationService {
   }
 
   /**
-   * Get item matching the given `id` or `null`, if not found.
+   * Get invitation by id or null if it is not found
+   * @param id Invitation id
+   * @param transactionHandler Database transaction handler
+   */
+  async get(id: string, transactionHandler: TrxHandler): Promise<Invitation> {
+    return transactionHandler
+      .query<Invitation>(
+        sql`
+        SELECT ${InvitationService.allColumns}
+        FROM invitation
+        WHERE id = ${id}
+      `,
+      )
+      .then(({ rows }) => rows[0] || null);
+  }
+
+  /**
+   * Get invitation matching the given item id
    * @param id Item id
    * @param transactionHandler Database transaction handler
    */
@@ -75,7 +92,7 @@ export class InvitationService {
   }
 
   /**
-   * Get item matching the given `id` or `null`, if not found.
+   * Get invitation by member id
    * @param id Item id
    * @param transactionHandler Database transaction handler
    */

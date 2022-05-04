@@ -1,11 +1,10 @@
 import { MemberTaskManager } from 'graasp';
 import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
 import Runner from 'graasp-test/src/tasks/taskRunner';
-import { BaseGraaspError } from 'graasp/util/graasp-error';
 import { StatusCodes } from 'http-status-codes';
 import build from './app';
 import { FIXTURES_INVITATIONS, FIXTURE_ITEM, MockError } from './fixtures';
-import { mockCreateTaskSequence, mockGetforItemTaskSequence } from './mocks';
+import { mockCreateTaskSequence, mockGetforItemTaskSequence, mockGetTask } from './mocks';
 
 const runner = new Runner();
 const itemMembershipTaskManager = new ItemMembershipTaskManager();
@@ -121,6 +120,42 @@ describe('Invitation Plugin', () => {
         method: 'GET',
         url: '/invalid-id/invitations',
         payload: { invitations: FIXTURES_INVITATIONS },
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+  });
+
+  describe('/invitations/:id', () => {
+    it('get invitation by id successfully', async () => {
+      const invitation = FIXTURES_INVITATIONS[0];
+      mockGetTask(runner, invitation);
+
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'GET',
+        url: `/invitations/${item.id}`,
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(await response.json()).toEqual(invitation);
+    });
+
+    it('throw if id is invalid', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'GET',
+        url: '/invitations/invalid-id',
       });
 
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
