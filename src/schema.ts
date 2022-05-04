@@ -4,13 +4,18 @@ export default {
     invitation: {
       type: 'object',
       properties: {
-        id: { type: 'string' },
-        creator: { type: 'string' },
-        itemId: { type: 'string' },
-        email: { type: 'string' },
-        name: { type: 'string' },
+        id: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        creator: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        itemId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        email: { type: 'string', format: 'email' },
+        name: { type: ['string', 'null'] },
         permission: { type: 'string' },
-        createdAt: { type: 'string' },
+        /**
+         * for some reason setting these date fields as "type: 'string'"
+         * makes the serialization fail using the anyOf. Following the same
+         * logic from above, here it's also safe to just remove that specification.
+         */
+        createdAt: {},
       },
       additionalProperties: false,
     },
@@ -21,7 +26,7 @@ export default {
       type: 'object',
       required: ['email', 'permission'],
       properties: {
-        email: { type: 'string' },
+        email: { type: 'string', format: 'email' },
         permission: { type: 'string' },
         name: { type: 'string' },
       },
@@ -47,8 +52,8 @@ export const invite = {
       type: 'array',
       items: {
         anyOf: [
+          { $ref: 'http://graasp.org/#/definitions/error' },
           { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
-          { $ref: 'http://graasp.org/#/definitions/error' }
         ]
       },
     },

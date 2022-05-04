@@ -1,4 +1,4 @@
-import { Actor, ItemMembership, ItemMembershipService } from 'graasp';
+import { ItemMembership } from 'graasp';
 import { sql, DatabaseTransactionConnection as TrxHandler } from 'slonik';
 import { BaseInvitation } from './base-invitation';
 import Invitation from './interfaces/invitation';
@@ -21,9 +21,9 @@ export class InvitationService {
       !Array.isArray(c)
         ? sql.identifier([c])
         : sql.join(
-            c.map((cwa) => sql.identifier([cwa])),
-            sql` AS `,
-          ),
+          c.map((cwa) => sql.identifier([cwa])),
+          sql` AS `,
+        ),
     ),
     sql`, `,
   );
@@ -42,14 +42,14 @@ export class InvitationService {
             "item_id",
             "email",
             "name",
-            "permission",
+            "permission"
         )
         VALUES (
             ${invitation.creator},
             ${invitation.itemId},
             ${invitation.email},
             ${invitation.name},
-            ${invitation.permission},
+            ${invitation.permission}
         )
         RETURNING ${InvitationService.allColumns}
       `,
@@ -125,13 +125,13 @@ export class InvitationService {
           "creator",  
           "member_id",
             "item_path",
-            "permission",
+            "permission"
         )
         VALUES (
             ${membership.creator},
             ${membership.memberId},
             ${membership.itemPath},
-            ${membership.permission},
+            ${membership.permission}
         )
       `,
       )

@@ -72,7 +72,6 @@ describe('Invitation Plugin', () => {
       const resultWithError = [...FIXTURES_INVITATIONS, new MockError()]
       mockCreateTaskSequence(runner, item, resultWithError);
 
-      console.log(`/${FIXTURES_INVITATIONS[0].itemId}/invite`)
       const app = await build({
         runner,
         itemTaskManager,

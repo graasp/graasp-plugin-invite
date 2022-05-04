@@ -3,6 +3,8 @@ import { BaseTask } from './base-task';
 import Invitation from '../interfaces/invitation';
 import { InvitationService } from '../db-service';
 import { BaseInvitation } from '../base-invitation';
+import { UniqueIntegrityConstraintViolationError } from 'slonik';
+import { DuplicateInvitationError } from '../errors';
 
 export type CreateInvitationTaskInputType = {
   invitation?: Partial<Invitation>;
@@ -28,10 +30,18 @@ class CreateInvitationTask extends BaseTask<Actor, Invitation> {
     const { invitation, itemId } = this.input;
 
     const { permission, email, name } = invitation;
-    this._result = await this.invitationService.create(
-      new BaseInvitation(this.actor.id, itemId, { permission, name, email }),
-      handler,
-    );
+    try {
+      this._result = await this.invitationService.create(
+        new BaseInvitation(this.actor.id, itemId, { permission, name, email }),
+        handler,
+      );
+    } catch (e) {
+      // throw if an invitation for the pair item id and email already exists
+      if (e instanceof UniqueIntegrityConstraintViolationError) {
+        throw new DuplicateInvitationError({ permission, itemId, email })
+      }
+      throw e;
+    }
 
     this.status = 'OK';
   }
