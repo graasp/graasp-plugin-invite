@@ -38,11 +38,11 @@ export class InvitationService {
       .query<Invitation>(
         sql`
         INSERT INTO "invitation" (
-            "creator",
-            "item_id",
-            "email",
-            "name",
-            "permission"
+          "creator",
+          "item_id",
+          "email",
+          "name",
+          "permission"
         )
         VALUES (
             ${invitation.creator},
@@ -79,13 +79,13 @@ export class InvitationService {
    * @param id Item id
    * @param transactionHandler Database transaction handler
    */
-  async getForMember(id: string, transactionHandler: TrxHandler): Promise<readonly Invitation[]> {
+  async getForMember(email: string, transactionHandler: TrxHandler): Promise<readonly Invitation[]> {
     return transactionHandler
       .query<Invitation>(
         sql`
         SELECT ${InvitationService.allColumns}
         FROM invitation
-        WHERE member_id = ${id}
+        WHERE email = ${email}
       `,
       )
       .then(({ rows }) => rows);
@@ -101,7 +101,7 @@ export class InvitationService {
     return transactionHandler
       .query<Invitation>(
         sql`
-        DELETE FROM item
+        DELETE FROM invitation
         WHERE id = ${id}
         RETURNING ${InvitationService.allColumns}
       `,
@@ -121,11 +121,11 @@ export class InvitationService {
     return transactionHandler
       .query<ItemMembership>(
         sql`
-        INSERT INTO "item_membership" (
+        INSERT INTO item_membership (
           "creator",  
           "member_id",
-            "item_path",
-            "permission"
+          "item_path",
+          "permission"
         )
         VALUES (
             ${membership.creator},

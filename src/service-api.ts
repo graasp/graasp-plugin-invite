@@ -34,9 +34,9 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
   const createCreateTaskName = mTM.getCreateTaskName();
   runner.setTaskPostHookHandler(
     createCreateTaskName,
-    async (member: Member, actor, { handler }) => {
+    async (member: Member, _actor, { handler }) => {
       // replace invitations to memberships
-      const invitations = await dbService.getForMember(member.id, handler);
+      const invitations = await dbService.getForMember(member.email, handler);
       if (invitations.length) {
         const sequences = invitations.map((invitation) =>
           taskManager.createCreateMembershipFromInvitationTaskSequence(member, {
