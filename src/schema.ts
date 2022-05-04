@@ -45,7 +45,12 @@ export const invite = {
   response: {
     200: {
       type: 'array',
-      items: { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
+      items: {
+        anyOf: [
+          { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
+          { $ref: 'http://graasp.org/#/definitions/error' }
+        ]
+      },
     },
   },
 };

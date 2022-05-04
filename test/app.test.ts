@@ -1,9 +1,10 @@
 import { MemberTaskManager } from 'graasp';
 import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
 import Runner from 'graasp-test/src/tasks/taskRunner';
+import { BaseGraaspError } from 'graasp/util/graasp-error';
 import { StatusCodes } from 'http-status-codes';
 import build from './app';
-import { FIXTURES_INVITATIONS, FIXTURE_ITEM } from './fixtures';
+import { FIXTURES_INVITATIONS, FIXTURE_ITEM, MockError } from './fixtures';
 import { mockCreateTaskSequence, mockGetforItemTaskSequence } from './mocks';
 
 const runner = new Runner();
@@ -65,6 +66,27 @@ describe('Invitation Plugin', () => {
       });
 
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+
+    it('Return errors correctly', async () => {
+      const resultWithError = [...FIXTURES_INVITATIONS, new MockError()]
+      mockCreateTaskSequence(runner, item, resultWithError);
+
+      console.log(`/${FIXTURES_INVITATIONS[0].itemId}/invite`)
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'POST',
+        url: `/${FIXTURES_INVITATIONS[0].itemId}/invite`,
+        payload: { invitations: FIXTURES_INVITATIONS },
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(await response.json()).toEqual(resultWithError);
     });
   });
 

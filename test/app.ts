@@ -20,6 +20,18 @@ const schemas = {
       },
       additionalProperties: false,
     },
+    error: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        code: { type: 'string' },
+        message: { type: 'string' },
+        statusCode: { type: 'number' },
+        data: {},
+        origin: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
   },
 };
 
