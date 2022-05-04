@@ -857,10 +857,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/utils@github:graasp/graasp-utils.git#6/itemType":
+"@graasp/utils@github:graasp/graasp-utils.git":
   version: 0.1.0
-  resolution: "@graasp/utils@https://github.com/graasp/graasp-utils.git#commit=7002185ea0c69d4fdcb349a1048203165c0601ab"
-  checksum: b57a44b12671e44a7a071c11093f5f2f3819249e0bbf93c700241a41b14d24f5df1b9cf6494004c47bc39df604eb230e963ab65125def2caf9f4537506920ce5
+  resolution: "@graasp/utils@https://github.com/graasp/graasp-utils.git#commit=e31e4065909a253e20082d2fea34cad466a11b83"
+  checksum: cf448e4cb02b13dad1f6f790bd09860a63ca087ce83888e38a3882e73c918b345247f70ee014fff9982a0b853627df7d0fdef5e16e7c98896ad82347223aa689
   languageName: node
   linkType: hard
 
@@ -3669,7 +3669,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^16.2.4
     "@commitlint/config-conventional": ^16.2.4
-    "@graasp/utils": "github:graasp/graasp-utils.git#6/itemType"
+    "@graasp/utils": "github:graasp/graasp-utils.git"
     "@types/graasp": "github:graasp/graasp-types#fixPermissionLevel"
     "@types/jest": 27.4.1
     "@typescript-eslint/eslint-plugin": 5.21.0
