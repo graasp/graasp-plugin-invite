@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
-import { IdParam, Item, Member } from 'graasp';
+import { Actor, IdParam, Item, Member } from 'graasp';
 import mailerPlugin from 'graasp-mailer';
 import definitions, { getById, getForItem, invite } from './schema';
 import InvitationTaskManager from './task-manager';
@@ -9,16 +9,18 @@ import { BuildInvitationLinkFunction } from './types';
 
 export interface GraaspPluginInvitationsOptions {
   buildInvitationLink: BuildInvitationLinkFunction;
+  graaspActor: Actor
 }
 
 const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fastify, options) => {
-  const { buildInvitationLink } = options;
+  const { buildInvitationLink, graaspActor } = options;
   const {
     taskRunner: runner,
     items: { taskManager: iTM },
     itemMemberships: { taskManager: iMTM },
     members: { taskManager: mTM, dbService: mS },
     mailer,
+
   } = fastify;
 
   if (!mailerPlugin) {
@@ -56,9 +58,9 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
   fastify.get<{ Params: IdParam }>(
     '/invitations/:id',
     { schema: getById },
-    async ({ member, params }) => {
+    async ({ params }) => {
       const { id } = params;
-      const task = taskManager.createGetTask(member, { id });
+      const task = taskManager.createGetTask(graaspActor, { id });
       return runner.runSingle(task);
     },
   );
