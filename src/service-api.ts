@@ -50,49 +50,9 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
     },
   );
 
-  fastify.post<{ Params: IdParam; Body: { invitations: Partial<Invitation>[] } }>(
-    '/:id/invite',
-    {
-      schema: invite,
-    },
-    async ({ member, body, params, log }) => {
-      const { id: itemId } = params;
-      const { invitations } = body;
-      const sequences = invitations.map((invitation) =>
-        taskManager.createCreateTaskSequence(member, { itemId, invitation }),
-      );
-      const completeInvitations = (await runner.runMultipleSequences(sequences)) as Invitation[];
-
-      const item = sequences[0][0].result as Item;
-
-      log.debug('send invitation mails');
-      completeInvitations.forEach((invitation) => {
-        // send mail without awaiting
-        const invitationLink = buildInvitationLink(invitation);
-        const lang = member?.extra?.lang as string;
-        mailer
-          .sendInvitationEmail(member, invitationLink, item.name, member.name, lang)
-          .catch((err) => {
-            log.warn(err, `mailer failed. invitation link: ${invitationLink}`);
-          });
-      });
-
-      return completeInvitations;
-    },
-  );
-
-  // get all invitations for an item
-  fastify.get<{ Params: IdParam }>(
-    '/:id/invitations',
-    { schema: getForItem },
-    async ({ member, params }) => {
-      const { id: itemId } = params;
-      const tasks = taskManager.createGetforItemTaskSequence(member, { itemId });
-      return runner.runSingleSequence(tasks);
-    },
-  );
 
   // get an invitation by id
+  // do not require authentication
   fastify.get<{ Params: IdParam }>(
     '/invitations/:id',
     { schema: getById },
@@ -102,6 +62,53 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
       return runner.runSingle(task);
     },
   );
+
+  fastify.register(async function (fastify) {
+    fastify.addHook('preHandler', fastify.verifyAuthentication);
+
+    fastify.post<{ Params: IdParam; Body: { invitations: Partial<Invitation>[] } }>(
+      '/:id/invite',
+      {
+        schema: invite,
+      },
+      async ({ member, body, params, log }) => {
+        const { id: itemId } = params;
+        const { invitations } = body;
+        const sequences = invitations.map((invitation) =>
+          taskManager.createCreateTaskSequence(member, { itemId, invitation }),
+        );
+        const completeInvitations = (await runner.runMultipleSequences(sequences)) as Invitation[];
+
+        const item = sequences[0][0].result as Item;
+
+        log.debug('send invitation mails');
+        completeInvitations.forEach((invitation) => {
+          // send mail without awaiting
+          const invitationLink = buildInvitationLink(invitation);
+          const lang = member?.extra?.lang as string;
+          mailer
+            .sendInvitationEmail(member, invitationLink, item.name, member.name, lang)
+            .catch((err) => {
+              log.warn(err, `mailer failed. invitation link: ${invitationLink}`);
+            });
+        });
+
+        return completeInvitations;
+      },
+    );
+
+    // get all invitations for an item
+    fastify.get<{ Params: IdParam }>(
+      '/:id/invitations',
+      { schema: getForItem },
+      async ({ member, params }) => {
+        const { id: itemId } = params;
+        const tasks = taskManager.createGetforItemTaskSequence(member, { itemId });
+        return runner.runSingleSequence(tasks);
+      },
+    );
+  });
+
 };
 
 export default basePlugin;
