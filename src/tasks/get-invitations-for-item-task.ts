@@ -1,10 +1,10 @@
-import { Actor, DatabaseTransactionHandler } from 'graasp';
+import { Actor, DatabaseTransactionHandler, Item } from 'graasp';
 import { BaseTask } from './base-task';
 import Invitation from '../interfaces/invitation';
 import { InvitationService } from '../db-service';
 
 export type GetInvitationsForItemTaskInputType = {
-  itemId?: string;
+  item?: Item;
 };
 
 class GetInvitationsForItemTask extends BaseTask<Actor, readonly Invitation[]> {
@@ -27,7 +27,7 @@ class GetInvitationsForItemTask extends BaseTask<Actor, readonly Invitation[]> {
   async run(handler: DatabaseTransactionHandler): Promise<void> {
     this.status = 'RUNNING';
 
-    this._result = await this.invitationService.getForItem(this.input.itemId, handler);
+    this._result = await this.invitationService.getForItem(this.input.item.path, handler);
 
     this.status = 'OK';
   }

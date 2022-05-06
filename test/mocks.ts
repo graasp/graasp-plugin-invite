@@ -2,9 +2,9 @@ import MockTask from 'graasp-test/src/tasks/task';
 import { InvitationService } from '../src/db-service';
 import InvitationTaskManager from '../src/task-manager';
 
-export const mockCreateMembershipFromInvitationTaskSequence = (data) => {
+export const mockCreateMembershipFromInvitationTask = (runner, data) => {
   return jest
-    .spyOn(InvitationTaskManager.prototype, 'createCreateMembershipFromInvitationTaskSequence')
+    .spyOn(InvitationTaskManager.prototype, 'createCreateMembershipFromInvitationTask')
     .mockImplementation(() => data);
 };
 
@@ -12,8 +12,8 @@ export const mockGetForMember = (data) => {
   jest.spyOn(InvitationService.prototype, 'getForMember').mockResolvedValue(data);
 };
 
-export const mockRunMultipleSequences = (runner, data) => {
-  jest.spyOn(runner, 'runMultipleSequences').mockResolvedValue(data);
+export const mockRunMultiple = (runner, data) => {
+  jest.spyOn(runner, 'runMultiple').mockResolvedValue(data);
 };
 
 export const mockCreateTaskSequence = (runner, item, data) => {
@@ -39,6 +39,26 @@ export const mockGetTask = (runner, data) => {
 export const mockGetforItemTaskSequence = (runner, data) => {
   jest
     .spyOn(InvitationTaskManager.prototype, 'createGetforItemTaskSequence')
+    .mockImplementation(() => []);
+
+  jest.spyOn(runner, 'runSingleSequence').mockImplementation(async () => {
+    return data;
+  });
+};
+
+export const mockCreateUpdateInvitationTaskSequence = (runner, data) => {
+  jest
+    .spyOn(InvitationTaskManager.prototype, 'createUpdateInvitationTaskSequence')
+    .mockImplementation(() => []);
+
+  jest.spyOn(runner, 'runSingleSequence').mockImplementation(async () => {
+    return data;
+  });
+};
+
+export const mockCreateDeleteInvitationTaskSequence = (runner, data) => {
+  jest
+    .spyOn(InvitationTaskManager.prototype, 'createDeleteInvitationTaskSequence')
     .mockImplementation(() => []);
 
   jest.spyOn(runner, 'runSingleSequence').mockImplementation(async () => {

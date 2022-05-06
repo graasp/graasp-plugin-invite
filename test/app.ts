@@ -54,6 +54,7 @@ const build = async ({
   const app = fastify();
   app.addSchema(schemas);
 
+  app.decorate('verifyAuthentication', jest.fn().mockResolvedValue(true));
   app.decorateRequest('member', GRAASP_ACTOR);
 
   app.decorate('items', { taskManager: itemTaskManager });
@@ -67,7 +68,10 @@ const build = async ({
         // do nothing
       }),
   });
-  await app.register(plugin, { buildInvitationLink: buildInvitationLink ?? jest.fn() });
+  await app.register(plugin, {
+    buildInvitationLink: buildInvitationLink ?? jest.fn(),
+    graaspActor: GRAASP_ACTOR,
+  });
 
   return app;
 };

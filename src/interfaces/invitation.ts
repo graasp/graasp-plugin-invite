@@ -6,7 +6,7 @@ interface Invitation {
   name: string;
   permission: PermissionLevel;
   email: string;
-  itemId: string;
+  itemPath: string;
   createdAt: string;
 }
 

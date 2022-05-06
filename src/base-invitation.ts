@@ -5,11 +5,11 @@ export class BaseInvitation {
   name: string;
   permission: PermissionLevel;
   email: string;
-  itemId: string;
+  itemPath: string;
 
   constructor(
     creator: string,
-    itemId: string,
+    itemPath: string,
     {
       name,
       permission,
@@ -24,6 +24,6 @@ export class BaseInvitation {
     this.name = name ?? null;
     this.permission = permission;
     this.email = email;
-    this.itemId = itemId;
+    this.itemPath = itemPath;
   }
 }

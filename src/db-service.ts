@@ -12,7 +12,7 @@ export class InvitationService {
     [
       'id',
       ['creator', 'creator'],
-      ['item_id', 'itemId'],
+      ['item_path', 'itemPath'],
       'name',
       'email',
       'permission',
@@ -39,14 +39,14 @@ export class InvitationService {
         sql`
         INSERT INTO "invitation" (
           "creator",
-          "item_id",
+          "item_path",
           "email",
           "name",
           "permission"
         )
         VALUES (
             ${invitation.creator},
-            ${invitation.itemId},
+            ${invitation.itemPath},
             ${invitation.email},
             ${invitation.name},
             ${invitation.permission}
@@ -75,17 +75,20 @@ export class InvitationService {
   }
 
   /**
-   * Get invitation matching the given item id
-   * @param id Item id
+   * Get invitation for item path and below
+   * @param itemPath Item path
    * @param transactionHandler Database transaction handler
    */
-  async getForItem(id: string, transactionHandler: TrxHandler): Promise<readonly Invitation[]> {
+  async getForItem(
+    itemPath: string,
+    transactionHandler: TrxHandler,
+  ): Promise<readonly Invitation[]> {
     return transactionHandler
       .query<Invitation>(
         sql`
         SELECT ${InvitationService.allColumns}
         FROM invitation
-        WHERE item_id = ${id}
+        WHERE ${itemPath} @> item_path
       `,
       )
       .then(({ rows }) => rows);
@@ -109,6 +112,39 @@ export class InvitationService {
       `,
       )
       .then(({ rows }) => rows);
+  }
+
+  /**
+   * Update invitation
+   * @see database_schema.sql
+   * @param id Item id
+   * @param transactionHandler Database transaction handler
+   */
+  async update(
+    id: string,
+    { permission, name }: Partial<Invitation>,
+    transactionHandler: TrxHandler,
+  ): Promise<Invitation> {
+    const data = { permission, name };
+    // dynamically build "column1 = value1, column2 = value2, ..." based on the
+    // properties present in data
+    const setValues = sql.join(
+      Object.keys(data).map((key: keyof Invitation) =>
+        sql.join([sql.identifier([key]), sql`${data[key]}`], sql` = `),
+      ),
+      sql`, `,
+    );
+
+    return transactionHandler
+      .query<Invitation>(
+        sql`
+        UPDATE invitation
+        SET ${setValues}
+        WHERE id = ${id}
+        RETURNING ${InvitationService.allColumns}
+      `,
+      )
+      .then(({ rows }) => rows[0] || null);
   }
 
   /**

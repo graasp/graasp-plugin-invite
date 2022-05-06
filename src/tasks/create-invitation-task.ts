@@ -1,4 +1,4 @@
-import { Actor, DatabaseTransactionHandler, MemberService } from 'graasp';
+import { Actor, DatabaseTransactionHandler, Item, MemberService } from 'graasp';
 import { BaseTask } from './base-task';
 import Invitation from '../interfaces/invitation';
 import { InvitationService } from '../db-service';
@@ -8,8 +8,13 @@ import { DuplicateInvitationError, MemberAlreadyExistForEmailError } from '../er
 
 export type CreateInvitationTaskInputType = {
   invitation?: Partial<Invitation>;
-  itemId?: string;
+  item?: Item;
 };
+
+// TODO: it would be better to correctly check the permissions as done when we create membership
+// ex: cannot add a lower permission below, remove unnecessary permissions
+// currently it is resolved automatically when creating the memberships
+// how to prettily refactor and reuse the logic of membership?
 
 class CreateInvitationTask extends BaseTask<Actor, Invitation> {
   memberService: MemberService;
@@ -35,7 +40,7 @@ class CreateInvitationTask extends BaseTask<Actor, Invitation> {
   async run(handler: DatabaseTransactionHandler): Promise<void> {
     this.status = 'RUNNING';
 
-    const { invitation, itemId } = this.input;
+    const { invitation, item } = this.input;
 
     const { permission, email, name } = invitation;
 
@@ -47,13 +52,13 @@ class CreateInvitationTask extends BaseTask<Actor, Invitation> {
 
     try {
       this._result = await this.invitationService.create(
-        new BaseInvitation(this.actor.id, itemId, { permission, name, email }),
+        new BaseInvitation(this.actor.id, item.path, { permission, name, email }),
         handler,
       );
     } catch (e) {
       // throw if an invitation for the pair item id and email already exists
       if (e instanceof UniqueIntegrityConstraintViolationError) {
-        throw new DuplicateInvitationError({ permission, itemId, email });
+        throw new DuplicateInvitationError({ permission, itemPath: item.path, email });
       }
       throw e;
     }

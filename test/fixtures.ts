@@ -11,22 +11,23 @@ export const GRAASP_ACTOR = {
 export const buildInvitation = ({
   email,
   permission,
-  itemId,
+  itemPath,
   name,
 }: {
   email?: string;
   permission?: PermissionLevel;
   name?: string;
-  itemId: string;
+  itemPath: string;
 }) => ({
-  itemId,
+  id: v4(),
+  itemPath,
   name: name ?? 'fake-name',
   email: email ?? 'fake-email@mail.com',
   permission: permission ?? PermissionLevel.Read,
 });
 
 const itemId = v4();
-const itemId2 = v4();
+const itemPath = 'itemPath';
 export const FIXTURE_ITEM = {
   id: itemId,
   name: 'my-item',
@@ -37,10 +38,10 @@ export const FIXTURE_MEMBER = {
   id: 'anna-id',
 };
 export const FIXTURES_INVITATIONS = [
-  buildInvitation({ itemId, ...FIXTURE_MEMBER }),
-  buildInvitation({ itemId: itemId2, ...FIXTURE_MEMBER }),
-  buildInvitation({ itemId, name: 'bob' }),
-  buildInvitation({ itemId, name: 'cedric' }),
+  buildInvitation({ itemPath, ...FIXTURE_MEMBER }),
+  buildInvitation({ itemPath, ...FIXTURE_MEMBER }),
+  buildInvitation({ itemPath, name: 'bob' }),
+  buildInvitation({ itemPath, name: 'cedric' }),
 ];
 
 export class MockError extends GraaspInvitationError {

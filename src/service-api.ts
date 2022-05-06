@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import { Actor, IdParam, Item, Member } from 'graasp';
 import mailerPlugin from 'graasp-mailer';
-import definitions, { getById, getForItem, invite } from './schema';
+import definitions, { deleteOne, getById, getForItem, invite, updateOne } from './schema';
 import InvitationTaskManager from './task-manager';
 import { InvitationService } from './db-service';
 import Invitation from './interfaces/invitation';
@@ -9,7 +9,7 @@ import { BuildInvitationLinkFunction } from './types';
 
 export interface GraaspPluginInvitationsOptions {
   buildInvitationLink: BuildInvitationLinkFunction;
-  graaspActor: Actor
+  graaspActor: Actor;
 }
 
 const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fastify, options) => {
@@ -20,7 +20,6 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
     itemMemberships: { taskManager: iMTM },
     members: { taskManager: mTM, dbService: mS },
     mailer,
-
   } = fastify;
 
   if (!mailerPlugin) {
@@ -40,30 +39,25 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
       // replace invitations to memberships
       const invitations = await dbService.getForMember(member.email, handler);
       if (invitations.length) {
-        const sequences = invitations.map((invitation) =>
-          taskManager.createCreateMembershipFromInvitationTaskSequence(member, {
+        const tasks = invitations.map((invitation) =>
+          taskManager.createCreateMembershipFromInvitationTask(member, {
             invitation,
             memberId: member.id,
           }),
         );
         // don't need to wait
-        runner.runMultipleSequences(sequences);
+        runner.runMultiple(tasks);
       }
     },
   );
 
-
   // get an invitation by id
   // do not require authentication
-  fastify.get<{ Params: IdParam }>(
-    '/invitations/:id',
-    { schema: getById },
-    async ({ params }) => {
-      const { id } = params;
-      const task = taskManager.createGetTask(graaspActor, { id });
-      return runner.runSingle(task);
-    },
-  );
+  fastify.get<{ Params: IdParam }>('/invitations/:id', { schema: getById }, async ({ params }) => {
+    const { id } = params;
+    const task = taskManager.createGetTask(graaspActor, { id });
+    return runner.runSingle(task);
+  });
 
   fastify.register(async function (fastify) {
     fastify.addHook('preHandler', fastify.verifyAuthentication);
@@ -109,8 +103,36 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
         return runner.runSingleSequence(tasks);
       },
     );
-  });
 
+    // update invitation
+    fastify.patch<{ Params: { id: string; invitationId: string }; Body: Partial<Invitation> }>(
+      '/:id/invitations/:invitationId',
+      { schema: updateOne },
+      async ({ member, params, body }) => {
+        const { id: itemId, invitationId } = params;
+        const tasks = taskManager.createUpdateInvitationTaskSequence(member, {
+          itemId,
+          invitationId,
+          body,
+        });
+        return runner.runSingleSequence(tasks);
+      },
+    );
+
+    // delete invitation
+    fastify.delete<{ Params: { id: string; invitationId: string } }>(
+      '/:id/invitations/:invitationId',
+      { schema: deleteOne },
+      async ({ member, params }) => {
+        const { id: itemId, invitationId } = params;
+        const tasks = taskManager.createDeleteInvitationTaskSequence(member, {
+          itemId,
+          invitationId,
+        });
+        return runner.runSingleSequence(tasks);
+      },
+    );
+  });
 };
 
 export default basePlugin;

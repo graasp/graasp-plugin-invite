@@ -6,7 +6,7 @@ export default {
       properties: {
         id: { $ref: 'http://graasp.org/#/definitions/uuid' },
         creator: { $ref: 'http://graasp.org/#/definitions/uuid' },
-        itemId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+        itemPath: { type: 'string' },
         email: { type: 'string', format: 'email' },
         name: { type: ['string', 'null'] },
         permission: { type: 'string' },
@@ -30,6 +30,25 @@ export default {
         permission: { type: 'string' },
         name: { type: 'string' },
       },
+      additionalProperties: false,
+    },
+
+    // partial invitation for update
+    // item id is defined from the param of the endpoint
+    partialInvitationForUpdate: {
+      type: 'object',
+      properties: {
+        permission: { type: 'string' },
+        name: { type: 'string' },
+      },
+      anyOf: [
+        {
+          required: ['permission'],
+        },
+        {
+          required: ['name'],
+        },
+      ],
       additionalProperties: false,
     },
   },
@@ -72,6 +91,35 @@ export const getForItem = {
 
 export const getById = {
   params: { $ref: 'http://graasp.org/#/definitions/idParam' },
+  response: {
+    200: { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
+  },
+};
+
+export const updateOne = {
+  params: {
+    type: 'object',
+    required: ['id', 'invitationId'],
+    properties: {
+      id: { $ref: 'http://graasp.org/#/definitions/uuid' },
+      invitationId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+    },
+  },
+  body: { $ref: 'http://graasp.org/invitations/#/definitions/partialInvitationForUpdate' },
+  response: {
+    200: { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
+  },
+};
+
+export const deleteOne = {
+  params: {
+    type: 'object',
+    required: ['id', 'invitationId'],
+    properties: {
+      id: { $ref: 'http://graasp.org/#/definitions/uuid' },
+      invitationId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+    },
+  },
   response: {
     200: { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
   },

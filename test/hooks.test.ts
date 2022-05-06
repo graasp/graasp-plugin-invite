@@ -4,11 +4,7 @@ import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
 import Runner from 'graasp-test/src/tasks/taskRunner';
 import build from './app';
 import { FIXTURES_INVITATIONS, FIXTURE_MEMBER, GRAASP_ACTOR } from './fixtures';
-import {
-  mockCreateMembershipFromInvitationTaskSequence,
-  mockGetForMember,
-  mockRunMultipleSequences,
-} from './mocks';
+import { mockCreateMembershipFromInvitationTask, mockGetForMember, mockRunMultiple } from './mocks';
 
 const runner = new Runner();
 const itemMembershipTaskManager = new ItemMembershipTaskManager();
@@ -36,7 +32,7 @@ describe('Hooks', () => {
 
   describe('Member create posthook', () => {
     beforeEach(() => {
-      mockRunMultipleSequences(runner, true);
+      mockRunMultiple(runner, true);
     });
 
     it('create invitations successfully', async () => {
@@ -44,7 +40,7 @@ describe('Hooks', () => {
       const filteredInvitations = invitations.filter(
         (invitation) => invitation.email === member.email,
       );
-      const mock = mockCreateMembershipFromInvitationTaskSequence(invitations);
+      const mock = mockCreateMembershipFromInvitationTask(runner, invitations);
       mockGetForMember(filteredInvitations);
 
       jest.spyOn(runner, 'setTaskPostHookHandler').mockImplementation(async (name, fn) => {
@@ -62,7 +58,7 @@ describe('Hooks', () => {
       const filteredInvitations = invitations.filter(
         (invitation) => invitation.email === member.email,
       );
-      const mock = mockCreateMembershipFromInvitationTaskSequence(invitations);
+      const mock = mockCreateMembershipFromInvitationTask(runner, invitations);
       mockGetForMember(filteredInvitations);
 
       jest.spyOn(runner, 'setTaskPostHookHandler').mockImplementation(async (name, fn) => {

@@ -1,10 +1,17 @@
+import { PermissionLevel } from '@graasp/utils';
 import { MemberTaskManager } from 'graasp';
 import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
 import Runner from 'graasp-test/src/tasks/taskRunner';
 import { StatusCodes } from 'http-status-codes';
 import build from './app';
 import { FIXTURES_INVITATIONS, FIXTURE_ITEM, MockError } from './fixtures';
-import { mockCreateTaskSequence, mockGetforItemTaskSequence, mockGetTask } from './mocks';
+import {
+  mockCreateDeleteInvitationTaskSequence,
+  mockCreateTaskSequence,
+  mockCreateUpdateInvitationTaskSequence,
+  mockGetforItemTaskSequence,
+  mockGetTask,
+} from './mocks';
 
 const runner = new Runner();
 const itemMembershipTaskManager = new ItemMembershipTaskManager();
@@ -20,7 +27,7 @@ describe('Invitation Plugin', () => {
     jest.spyOn(runner, 'setTaskPostHookHandler').mockImplementation(jest.fn());
   });
 
-  describe('/invite', () => {
+  describe('POST /invite', () => {
     it('create invitations successfully', async () => {
       mockCreateTaskSequence(runner, item, FIXTURES_INVITATIONS);
 
@@ -38,7 +45,7 @@ describe('Invitation Plugin', () => {
       });
       const response = await app.inject({
         method: 'POST',
-        url: `/${FIXTURES_INVITATIONS[0].itemId}/invite`,
+        url: `/${item.id}/invite`,
         payload: { invitations: FIXTURES_INVITATIONS },
       });
 
@@ -79,7 +86,7 @@ describe('Invitation Plugin', () => {
       });
       const response = await app.inject({
         method: 'POST',
-        url: `/${FIXTURES_INVITATIONS[0].itemId}/invite`,
+        url: `/${item.id}/invite`,
         payload: { invitations: FIXTURES_INVITATIONS },
       });
 
@@ -88,7 +95,7 @@ describe('Invitation Plugin', () => {
     });
   });
 
-  describe('/:id/invitations', () => {
+  describe('GET /:id/invitations', () => {
     it('get invitations for item successfully', async () => {
       const invitations = FIXTURES_INVITATIONS;
       mockGetforItemTaskSequence(runner, invitations);
@@ -101,7 +108,7 @@ describe('Invitation Plugin', () => {
       });
       const response = await app.inject({
         method: 'GET',
-        url: `/${invitations[0].itemId}/invitations`,
+        url: `/${item.id}/invitations`,
         payload: { invitations },
       });
 
@@ -126,7 +133,7 @@ describe('Invitation Plugin', () => {
     });
   });
 
-  describe('/invitations/:id', () => {
+  describe('GET /invitations/:id', () => {
     it('get invitation by id successfully', async () => {
       const invitation = FIXTURES_INVITATIONS[0];
       mockGetTask(runner, invitation);
@@ -139,7 +146,7 @@ describe('Invitation Plugin', () => {
       });
       const response = await app.inject({
         method: 'GET',
-        url: `/invitations/${item.id}`,
+        url: `/invitations/${invitation.id}`,
       });
 
       expect(response.statusCode).toEqual(StatusCodes.OK);
@@ -156,6 +163,136 @@ describe('Invitation Plugin', () => {
       const response = await app.inject({
         method: 'GET',
         url: '/invitations/invalid-id',
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+  });
+
+  describe('PATCH /:itemId/invitations/:id', () => {
+    const invitation = FIXTURES_INVITATIONS[0];
+    it('update invitation successfully', async () => {
+      mockCreateUpdateInvitationTaskSequence(runner, invitation);
+
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'PATCH',
+        url: `${item.id}/invitations/${invitation.id}`,
+        payload: {
+          permission: PermissionLevel.Admin,
+          name: 'myname',
+        },
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(await response.json()).toEqual(invitation);
+    });
+
+    it('throw if item id is invalid', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'PATCH',
+        url: `invalid/invitations/${invitation.id}`,
+        payload: {
+          permission: PermissionLevel.Admin,
+          name: 'myname',
+        },
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+
+    it('throw if invitation id is invalid', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'PATCH',
+        url: `${item.id}/invitations/invalid-id`,
+        payload: {
+          permission: PermissionLevel.Admin,
+          name: 'myname',
+        },
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+
+    it('throw if payload is empty', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'PATCH',
+        url: `${item.id}/invitations/${invitation.id}`,
+        payload: {},
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+  });
+
+  describe('DELETE /:itemId/invitations/:id', () => {
+    const invitation = FIXTURES_INVITATIONS[0];
+    it('delete invitation successfully', async () => {
+      mockCreateDeleteInvitationTaskSequence(runner, invitation);
+
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'DELETE',
+        url: `${item.id}/invitations/${invitation.id}`,
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(await response.json()).toEqual(invitation);
+    });
+
+    it('throw if item id is invalid', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'DELETE',
+        url: `invalid/invitations/${invitation.id}`,
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+
+    it('throw if invitation id is invalid', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'DELETE',
+        url: `${item.id}/invitations/invalid-id`,
       });
 
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);

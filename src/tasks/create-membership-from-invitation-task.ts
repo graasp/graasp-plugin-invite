@@ -1,4 +1,4 @@
-import { Actor, DatabaseTransactionHandler, Item, ItemMembership } from 'graasp';
+import { Actor, DatabaseTransactionHandler, ItemMembership } from 'graasp';
 import { BaseTask } from './base-task';
 import Invitation from '../interfaces/invitation';
 import { InvitationService } from '../db-service';
@@ -6,12 +6,9 @@ import { InvitationService } from '../db-service';
 export type CreateMembershipFromInvitationTaskInputType = {
   invitation?: Invitation;
   memberId?: string;
-  item?: Item;
 };
 
 class CreateMembershipFromInvitationTask extends BaseTask<Actor, ItemMembership> {
-  // itemService: ItemService
-
   get name(): string {
     return CreateMembershipFromInvitationTask.name;
   }
@@ -31,10 +28,10 @@ class CreateMembershipFromInvitationTask extends BaseTask<Actor, ItemMembership>
   async run(handler: DatabaseTransactionHandler): Promise<void> {
     this.status = 'RUNNING';
 
-    const { invitation, item, memberId } = this.input;
+    const { invitation, memberId } = this.input;
 
     const partialMembership = {
-      itemPath: item.path,
+      itemPath: invitation.itemPath,
       memberId,
       permission: invitation.permission,
       creator: invitation.creator,
