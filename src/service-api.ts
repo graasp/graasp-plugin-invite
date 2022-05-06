@@ -1,11 +1,12 @@
 import { FastifyPluginAsync } from 'fastify';
 import { Actor, IdParam, Item, Member } from 'graasp';
 import mailerPlugin from 'graasp-mailer';
-import definitions, { deleteOne, getById, getForItem, invite, updateOne } from './schema';
+import definitions, { deleteOne, getById, getForItem, invite, sendOne, updateOne } from './schema';
 import InvitationTaskManager from './task-manager';
 import { InvitationService } from './db-service';
 import Invitation from './interfaces/invitation';
 import { BuildInvitationLinkFunction } from './types';
+import { StatusCodes } from 'http-status-codes';
 
 export interface GraaspPluginInvitationsOptions {
   buildInvitationLink: BuildInvitationLinkFunction;
@@ -30,6 +31,17 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
   const taskManager = new InvitationTaskManager(dbService, iTM, iMTM, mS);
 
   fastify.addSchema(definitions);
+
+  const sendInvitationEmail = ({ item, member, invitation, log }) => {
+    const invitationLink = buildInvitationLink(invitation);
+    const lang = member?.extra?.lang as string;
+
+    mailer
+      .sendInvitationEmail(member, invitationLink, item.name, member.name, lang)
+      .catch((err) => {
+        log.warn(err, `mailer failed. invitation link: ${invitationLink}`);
+      });
+  };
 
   // on member creation, invitations become memberships
   const createCreateTaskName = mTM.getCreateTaskName();
@@ -80,13 +92,7 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
         log.debug('send invitation mails');
         completeInvitations.forEach((invitation) => {
           // send mail without awaiting
-          const invitationLink = buildInvitationLink(invitation);
-          const lang = member?.extra?.lang as string;
-          mailer
-            .sendInvitationEmail(member, invitationLink, item.name, member.name, lang)
-            .catch((err) => {
-              log.warn(err, `mailer failed. invitation link: ${invitationLink}`);
-            });
+          sendInvitationEmail({ item, invitation, log, member });
         });
 
         return completeInvitations;
@@ -130,6 +136,23 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
           invitationId,
         });
         return runner.runSingleSequence(tasks);
+      },
+    );
+
+    // resend invitation mail
+    fastify.post<{ Params: { id: string; invitationId: string } }>(
+      '/:id/invitations/:invitationId/send',
+      { schema: sendOne },
+      async ({ member, params, log }, reply) => {
+        const { id: itemId, invitationId } = params;
+        const tasks = this.iTM.createGetTaskSequence(member, {
+          itemId,
+          invitationId,
+        });
+        const invitationTask = this.taskManager.createGetTask(member, { id: invitationId });
+        const invitation = await runner.runSingleSequence([...tasks, invitationTask]);
+        sendInvitationEmail({ item: tasks[0].result, invitation, log, member });
+        reply.status(StatusCodes.NO_CONTENT);
       },
     );
   });

@@ -298,4 +298,63 @@ describe('Invitation Plugin', () => {
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
     });
   });
+
+  describe('POST /:itemId/invitations/:id/send', () => {
+    const invitation = FIXTURES_INVITATIONS[0];
+    it('send invitation successfully', async () => {
+      mockCreateDeleteInvitationTaskSequence(runner, invitation);
+
+      const buildInvitationLink = jest.fn().mockReturnValue('link');
+      const mockSendMail = jest.fn().mockImplementation(async () => {
+        const app = await build({
+          runner,
+          itemTaskManager,
+          memberTaskManager,
+          itemMembershipTaskManager,
+          sendInvitationEmail: mockSendMail,
+          buildInvitationLink,
+        });
+        const response = await app.inject({
+          method: 'POST',
+          url: `${item.id}/invitations/${invitation.id}/send`,
+        });
+
+        expect(response.statusCode).toEqual(StatusCodes.NO_CONTENT);
+        // check email got sent
+        setTimeout(() => {
+          expect(mockSendMail).toHaveBeenCalled();
+        }, 1000);
+      });
+    });
+
+    it('throw if item id is invalid', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'POST',
+        url: `invalid/invitations/${invitation.id}/send`,
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+
+    it('throw if invitation id is invalid', async () => {
+      const app = await build({
+        runner,
+        itemTaskManager,
+        memberTaskManager,
+        itemMembershipTaskManager,
+      });
+      const response = await app.inject({
+        method: 'POST',
+        url: `${item.id}/invitations/invalid-id/send`,
+      });
+
+      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    });
+  });
 });

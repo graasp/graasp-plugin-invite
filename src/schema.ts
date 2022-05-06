@@ -124,3 +124,14 @@ export const deleteOne = {
     200: { $ref: 'http://graasp.org/invitations/#/definitions/invitation' },
   },
 };
+
+export const sendOne = {
+  params: {
+    type: 'object',
+    required: ['id', 'invitationId'],
+    properties: {
+      id: { $ref: 'http://graasp.org/#/definitions/uuid' },
+      invitationId: { $ref: 'http://graasp.org/#/definitions/uuid' },
+    },
+  },
+};
