@@ -50,7 +50,7 @@ class InvitationTaskManager {
       validatePermission: PermissionLevel.Write,
     });
     const t3 = new CreateInvitationTask(member, this.invitationService, this.memberService);
-    t2.getInput = () => ({
+    t3.getInput = () => ({
       ...data,
       item: t1.result,
     });
@@ -65,7 +65,7 @@ class InvitationTaskManager {
       validatePermission: PermissionLevel.Write,
     });
     const t3 = new GetInvitationsForItemTask(member, this.invitationService);
-    t2.getInput = () => ({
+    t3.getInput = () => ({
       ...data,
       item: t1.result,
     });

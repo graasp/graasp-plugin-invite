@@ -7,5 +7,5 @@ CREATE TABLE "invitation" (
   -- todo: use permission type
   "permission" permissions_enum NOT NULL,
   "created_at" timestamp NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
-  PRIMARY KEY ("item_id","email")
+  PRIMARY KEY ("item_path","email")
 );
