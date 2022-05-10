@@ -145,11 +145,8 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
       { schema: sendOne },
       async ({ member, params, log }, reply) => {
         const { id: itemId, invitationId } = params;
-        const tasks = this.iTM.createGetTaskSequence(member, {
-          itemId,
-          invitationId,
-        });
-        const invitationTask = this.taskManager.createGetTask(member, { id: invitationId });
+        const tasks = iTM.createGetTaskSequence(member, itemId);
+        const invitationTask = taskManager.createGetTask(member, { id: invitationId });
         const invitation = await runner.runSingleSequence([...tasks, invitationTask]);
         sendInvitationEmail({ item: tasks[0].result, invitation, log, member });
         reply.status(StatusCodes.NO_CONTENT);

@@ -29,9 +29,7 @@ class UpdateInvitationTask extends BaseTask<Actor, Invitation> {
   async run(handler: DatabaseTransactionHandler): Promise<void> {
     this.status = 'RUNNING';
 
-    const { invitation } = this.input;
-
-    const { id } = invitation;
+    const { invitation, id } = this.input;
 
     this._result = await this.invitationService.update(id, invitation, handler);
 

@@ -21,9 +21,9 @@ export class InvitationService {
       !Array.isArray(c)
         ? sql.identifier([c])
         : sql.join(
-            c.map((cwa) => sql.identifier([cwa])),
-            sql` AS `,
-          ),
+          c.map((cwa) => sql.identifier([cwa])),
+          sql` AS `,
+        ),
     ),
     sql`, `,
   );
@@ -122,10 +122,9 @@ export class InvitationService {
    */
   async update(
     id: string,
-    { permission, name }: Partial<Invitation>,
+    data: Partial<Invitation>,
     transactionHandler: TrxHandler,
   ): Promise<Invitation> {
-    const data = { permission, name };
     // dynamically build "column1 = value1, column2 = value2, ..." based on the
     // properties present in data
     const setValues = sql.join(
