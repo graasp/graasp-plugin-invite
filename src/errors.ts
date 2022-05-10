@@ -25,7 +25,7 @@ export class DuplicateInvitationError extends GraaspInvitationError {
       {
         code: 'GPINVERR001',
         statusCode: StatusCodes.CONFLICT,
-        message: 'Invitation already exists or has a different membership for item and email pair',
+        message: 'An invitation already exists for this item and email pair',
       },
       data,
     );
