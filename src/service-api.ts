@@ -37,7 +37,7 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
     const lang = member?.extra?.lang as string;
 
     mailer
-      .sendInvitationEmail(member, invitationLink, item.name, member.name, lang)
+      .sendInvitationEmail(invitation.email, invitationLink, item.name, member.name, lang)
       .catch((err) => {
         log.warn(err, `mailer failed. invitation link: ${invitationLink}`);
       });
