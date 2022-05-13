@@ -24,6 +24,8 @@ export const buildInvitation = ({
   name: name ?? 'fake-name',
   email: email ?? 'fake-email@mail.com',
   permission: permission ?? PermissionLevel.Read,
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
 });
 
 const itemId = v4();

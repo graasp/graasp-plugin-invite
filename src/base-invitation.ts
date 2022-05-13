@@ -1,6 +1,7 @@
 import { PermissionLevel } from 'graasp';
+import Invitation from './interfaces/invitation';
 
-export class BaseInvitation {
+export class BaseInvitation implements Partial<Invitation> {
   creator: string;
   name: string;
   permission: PermissionLevel;

@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
-import { Actor, IdParam, Item, Member } from 'graasp';
+import { Actor, IdParam, Member } from 'graasp';
 import mailerPlugin from 'graasp-mailer';
 import definitions, { deleteOne, getById, getForItem, invite, sendOne, updateOne } from './schema';
 import InvitationTaskManager from './task-manager';
@@ -85,15 +85,18 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
         const sequences = invitations.map((invitation) =>
           taskManager.createCreateTaskSequence(member, { itemId, invitation }),
         );
+
         const completeInvitations = (await runner.runMultipleSequences(sequences)) as Invitation[];
+        if (completeInvitations.length) {
+          const [getItemTask] = sequences[0];
+          const { result: item } = getItemTask;
 
-        const item = sequences[0][0].result as Item;
-
-        log.debug('send invitation mails');
-        completeInvitations.forEach((invitation) => {
-          // send mail without awaiting
-          sendInvitationEmail({ item, invitation, log, member });
-        });
+          log.debug('send invitation mails');
+          completeInvitations.forEach((invitation) => {
+            // send mail without awaiting
+            sendInvitationEmail({ item, invitation, log, member });
+          });
+        }
 
         return completeInvitations;
       },
@@ -148,7 +151,10 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
         const tasks = iTM.createGetTaskSequence(member, itemId);
         const invitationTask = taskManager.createGetTask(member, { id: invitationId });
         const invitation = await runner.runSingleSequence([...tasks, invitationTask]);
-        sendInvitationEmail({ item: tasks[0].result, invitation, log, member });
+
+        const [getItemTask] = tasks;
+        const { result: item } = getItemTask;
+        sendInvitationEmail({ item, invitation, log, member });
         reply.status(StatusCodes.NO_CONTENT);
       },
     );

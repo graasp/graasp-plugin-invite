@@ -15,7 +15,8 @@ export default {
          * makes the serialization fail using the anyOf. Following the same
          * logic from above, here it's also safe to just remove that specification.
          */
-        createdAt: {},
+        createdAt: { format: 'date-time' },
+        updatedAt: { format: 'date-time' },
       },
       additionalProperties: false,
     },

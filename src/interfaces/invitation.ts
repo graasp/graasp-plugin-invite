@@ -8,6 +8,7 @@ interface Invitation {
   email: string;
   itemPath: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export default Invitation;
