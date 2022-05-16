@@ -1373,10 +1373,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/graasp@github:graasp/graasp-types#fixPermissionLevel":
+"@types/graasp@github:graasp/graasp-types":
   version: 0.1.0
-  resolution: "@types/graasp@https://github.com/graasp/graasp-types.git#commit=19c16c7b5e1c030362dc965d78860201af5667f0"
-  checksum: ae9588af8c948241f7bed01a561113596c420881a24283c0c6e0c43e55fc46786ee650af772e0659a075788a85f111cb23945524d97f8b3acb142197a8b16da2
+  resolution: "@types/graasp@https://github.com/graasp/graasp-types.git#commit=1dde116429496a40a080dbaddf489a9f47196302"
+  checksum: 8ada1dcede2fcd9bd5cf7c5acda81f3a11a291e240b8f4929c7824e2473932c877fa4ce784f3e0cc39cd545db61ded694c2e1ceb3bf870be1e58f32b36b20cbc
   languageName: node
   linkType: hard
 
@@ -3648,9 +3648,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graasp-mailer@github:graasp/graasp-mailer.git#19/invitation":
+"graasp-mailer@github:graasp/graasp-mailer.git":
   version: 0.1.0
-  resolution: "graasp-mailer@https://github.com/graasp/graasp-mailer.git#commit=edf626e729de229f26b1dfe1a779008339bcf533"
+  resolution: "graasp-mailer@https://github.com/graasp/graasp-mailer.git#commit=52cc2a60277f9e30039f94e99f46f593bede00e5"
   dependencies:
     cpy-cli: 4.1.0
     eta: ^1.12.3
@@ -3670,14 +3670,14 @@ __metadata:
     "@commitlint/cli": ^16.2.4
     "@commitlint/config-conventional": ^16.2.4
     "@graasp/utils": "github:graasp/graasp-utils.git"
-    "@types/graasp": "github:graasp/graasp-types#fixPermissionLevel"
+    "@types/graasp": "github:graasp/graasp-types"
     "@types/jest": 27.4.1
     "@typescript-eslint/eslint-plugin": 5.21.0
     "@typescript-eslint/parser": 5.21.0
     eslint: ^8.14.0
     eslint-config-prettier: ^8.5.0
     fastify: ^3.25.3
-    graasp-mailer: "github:graasp/graasp-mailer.git#19/invitation"
+    graasp-mailer: "github:graasp/graasp-mailer.git"
     graasp-test: "github:graasp/graasp-test"
     http-status-codes: 2.2.0
     husky: 7.0.4

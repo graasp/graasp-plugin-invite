@@ -5,6 +5,7 @@ export class BaseInvitation implements Partial<Invitation> {
   creator: string;
   name: string;
   permission: PermissionLevel;
+
   email: string;
   itemPath: string;
 
@@ -13,6 +14,7 @@ export class BaseInvitation implements Partial<Invitation> {
     itemPath: string,
     {
       name,
+
       permission,
       email,
     }: {

@@ -1,12 +1,12 @@
 import {
   Actor,
-  PermissionLevel,
   ItemMembershipTaskManager,
   ItemTaskManager,
   Task,
   MemberService,
   Item,
 } from 'graasp';
+import { PermissionLevel } from './constants';
 import { InvitationService } from './db-service';
 import Invitation from './interfaces/invitation';
 import CreateInvitationTask from './tasks/create-invitation-task';
@@ -47,6 +47,7 @@ class InvitationTaskManager {
       item: t1.result,
       validatePermission: PermissionLevel.Write,
     });
+
     return [t1, t2];
   }
 

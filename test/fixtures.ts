@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { PermissionLevel } from 'graasp';
+import { PermissionLevel } from '../src/constants';
 import { GraaspInvitationError } from '../src/errors';
 import { StatusCodes } from 'http-status-codes';
 

@@ -1,7 +1,7 @@
-import { PermissionLevel } from '@graasp/utils';
 import { MemberTaskManager } from 'graasp';
 import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
 import Runner from 'graasp-test/src/tasks/taskRunner';
+import { PermissionLevel } from '../src/constants';
 import { StatusCodes } from 'http-status-codes';
 import build from './app';
 import { FIXTURES_INVITATIONS, FIXTURE_ITEM, MockError } from './fixtures';
