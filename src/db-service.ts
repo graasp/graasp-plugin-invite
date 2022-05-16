@@ -17,14 +17,14 @@ export class InvitationService {
       'email',
       'permission',
       ['created_at', 'createdAt'],
-      ['updated_At', 'updatedAt'],
+      ['updated_at', 'updatedAt'],
     ].map((c) =>
       !Array.isArray(c)
         ? sql.identifier([c])
         : sql.join(
-            c.map((cwa) => sql.identifier([cwa])),
-            sql` AS `,
-          ),
+          c.map((cwa) => sql.identifier([cwa])),
+          sql` AS `,
+        ),
     ),
     sql`, `,
   );
