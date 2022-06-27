@@ -42,7 +42,10 @@ class CreateInvitationTask extends BaseTask<Actor, Invitation> {
 
     const { invitation, item } = this.input;
 
-    const { permission, email, name } = invitation;
+    const { permission, email: originalEmail, name } = invitation;
+
+    // lowercase email
+    const email = originalEmail.toLowerCase();
 
     // check no member has this email already -> a membership should be created right away
     const members = await this.memberService.getMatching({ email }, handler);
