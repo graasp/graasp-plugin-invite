@@ -1,6 +1,8 @@
 import fastify from 'fastify';
+
 import { ItemMembershipTaskManager, MemberTaskManager } from 'graasp';
 import { ItemTaskManager, TaskRunner } from 'graasp-test';
+
 import plugin from '../src/service-api';
 import { BuildInvitationLinkFunction } from '../src/types';
 import { GRAASP_ACTOR } from './fixtures';

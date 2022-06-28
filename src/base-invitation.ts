@@ -1,4 +1,5 @@
 import { PermissionLevel } from 'graasp';
+
 import Invitation from './interfaces/invitation';
 
 export class BaseInvitation implements Partial<Invitation> {

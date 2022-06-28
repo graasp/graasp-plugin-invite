@@ -1,10 +1,12 @@
-import { Actor, DatabaseTransactionHandler, Item, MemberService } from 'graasp';
-import { BaseTask } from './base-task';
-import Invitation from '../interfaces/invitation';
-import { InvitationService } from '../db-service';
-import { BaseInvitation } from '../base-invitation';
 import { UniqueIntegrityConstraintViolationError } from 'slonik';
+
+import { Actor, DatabaseTransactionHandler, Item, MemberService } from 'graasp';
+
+import { BaseInvitation } from '../base-invitation';
+import { InvitationService } from '../db-service';
 import { DuplicateInvitationError, MemberAlreadyExistForEmailError } from '../errors';
+import Invitation from '../interfaces/invitation';
+import { BaseTask } from './base-task';
 
 export type CreateInvitationTaskInputType = {
   invitation?: Partial<Invitation>;

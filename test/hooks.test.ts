@@ -1,7 +1,9 @@
 import { FastifyLoggerInstance } from 'fastify';
+
 import { DatabaseTransactionHandler, MemberTaskManager } from 'graasp';
 import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
 import Runner from 'graasp-test/src/tasks/taskRunner';
+
 import build from './app';
 import { FIXTURES_INVITATIONS, FIXTURE_MEMBER, GRAASP_ACTOR } from './fixtures';
 import { mockCreateMembershipFromInvitationTask, mockGetForMember, mockRunMultiple } from './mocks';

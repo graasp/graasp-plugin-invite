@@ -1,7 +1,8 @@
 import { Actor, DatabaseTransactionHandler, Item } from 'graasp';
-import { BaseTask } from './base-task';
-import Invitation from '../interfaces/invitation';
+
 import { InvitationService } from '../db-service';
+import Invitation from '../interfaces/invitation';
+import { BaseTask } from './base-task';
 
 export type GetInvitationsForItemTaskInputType = {
   item?: Item;

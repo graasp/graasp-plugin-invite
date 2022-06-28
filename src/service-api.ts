@@ -1,12 +1,15 @@
+import { StatusCodes } from 'http-status-codes';
+
 import { FastifyPluginAsync } from 'fastify';
+
 import { Actor, IdParam, Member } from 'graasp';
 import mailerPlugin from 'graasp-mailer';
-import definitions, { deleteOne, getById, getForItem, invite, sendOne, updateOne } from './schema';
-import InvitationTaskManager from './task-manager';
+
 import { InvitationService } from './db-service';
 import Invitation from './interfaces/invitation';
+import definitions, { deleteOne, getById, getForItem, invite, sendOne, updateOne } from './schema';
+import InvitationTaskManager from './task-manager';
 import { BuildInvitationLinkFunction } from './types';
-import { StatusCodes } from 'http-status-codes';
 
 export interface GraaspPluginInvitationsOptions {
   buildInvitationLink: BuildInvitationLinkFunction;

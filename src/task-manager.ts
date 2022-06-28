@@ -1,11 +1,12 @@
 import {
   Actor,
+  Item,
   ItemMembershipTaskManager,
   ItemTaskManager,
-  Task,
   MemberService,
-  Item,
+  Task,
 } from 'graasp';
+
 import { PermissionLevel } from './constants';
 import { InvitationService } from './db-service';
 import Invitation from './interfaces/invitation';

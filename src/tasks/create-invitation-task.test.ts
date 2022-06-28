@@ -1,10 +1,12 @@
-import { DatabaseTransactionHandler, Item, MemberService } from 'graasp';
-import { GRAASP_ACTOR } from '../../test/fixtures';
-import { PermissionLevel } from 'graasp';
-import { InvitationService } from '../db-service';
-import CreateInvitationTask from './create-invitation-task';
-import { DuplicateInvitationError, MemberAlreadyExistForEmailError } from '../errors';
 import { UniqueIntegrityConstraintViolationError } from 'slonik';
+
+import { DatabaseTransactionHandler, Item, MemberService } from 'graasp';
+import { PermissionLevel } from 'graasp';
+
+import { GRAASP_ACTOR } from '../../test/fixtures';
+import { InvitationService } from '../db-service';
+import { DuplicateInvitationError, MemberAlreadyExistForEmailError } from '../errors';
+import CreateInvitationTask from './create-invitation-task';
 
 const actor = GRAASP_ACTOR;
 const invitationService = {} as unknown as InvitationService;
@@ -42,7 +44,7 @@ describe('Create Invitation Task', () => {
     );
   });
 
-  it('Throw if email matches a register member', async () => {
+  it('Throw if email matches a registered member', async () => {
     memberService.getMatching = jest.fn().mockResolvedValue([actor]);
 
     const invitation = {

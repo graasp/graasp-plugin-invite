@@ -1,7 +1,8 @@
+import { StatusCodes } from 'http-status-codes';
 import { v4 } from 'uuid';
+
 import { PermissionLevel } from '../src/constants';
 import { GraaspInvitationError } from '../src/errors';
-import { StatusCodes } from 'http-status-codes';
 
 export const GRAASP_ACTOR = {
   name: 'graasp',
