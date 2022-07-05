@@ -1,13 +1,15 @@
 import { FastifyLoggerInstance } from 'fastify';
+
 import {
-  Task,
-  TaskStatus,
   Actor,
   DatabaseTransactionHandler,
-  PreHookHandlerType,
-  PostHookHandlerType,
   IndividualResultType,
+  PostHookHandlerType,
+  PreHookHandlerType,
+  Task,
+  TaskStatus,
 } from 'graasp';
+
 import { InvitationService } from '../db-service';
 
 export abstract class BaseTask<A extends Actor, R> implements Task<Actor, R> {

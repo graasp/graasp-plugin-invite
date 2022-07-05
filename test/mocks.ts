@@ -1,4 +1,5 @@
 import MockTask from 'graasp-test/src/tasks/task';
+
 import { InvitationService } from '../src/db-service';
 import InvitationTaskManager from '../src/task-manager';
 
