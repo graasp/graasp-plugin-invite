@@ -1,8 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { v4 } from 'uuid';
 
-import { PermissionLevel } from '../src/constants';
-import { GraaspInvitationError } from '../src/errors';
+import { BaseGraaspError, PermissionLevel } from '@graasp/sdk';
 
 export const GRAASP_ACTOR = {
   name: 'graasp',
@@ -47,7 +46,7 @@ export const FIXTURES_INVITATIONS = [
   buildInvitation({ itemPath, name: 'cedric' }),
 ];
 
-export class MockError extends GraaspInvitationError {
+export class MockError extends BaseGraaspError {
   constructor(data?: unknown) {
     super(
       { code: 'GPINVERR001', statusCode: StatusCodes.NOT_FOUND, message: 'Item not found' },

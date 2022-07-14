@@ -1,7 +1,6 @@
 import { UniqueIntegrityConstraintViolationError } from 'slonik';
 
-import { DatabaseTransactionHandler, Item, MemberService } from 'graasp';
-import { PermissionLevel } from 'graasp';
+import { DatabaseTransactionHandler, Item, MemberService, PermissionLevel } from '@graasp/sdk';
 
 import { GRAASP_ACTOR } from '../../test/fixtures';
 import { InvitationService } from '../db-service';
@@ -24,7 +23,7 @@ describe('Create Invitation Task', () => {
     const invitation = {
       email: 'MyEmailWithCapital@email.org',
       name: 'myInvitation',
-      permission: 'admin' as PermissionLevel,
+      permission: PermissionLevel.Admin,
     };
 
     const task = new CreateInvitationTask(actor, invitationService, memberService, {
@@ -50,7 +49,7 @@ describe('Create Invitation Task', () => {
     const invitation = {
       email: 'graasp@email.org',
       name: 'myInvitation',
-      permission: 'admin' as PermissionLevel,
+      permission: PermissionLevel.Admin,
     };
 
     const task = new CreateInvitationTask(actor, invitationService, memberService, {
@@ -74,7 +73,7 @@ describe('Create Invitation Task', () => {
     const invitation = {
       email: 'graasp@email.org',
       name: 'myInvitation',
-      permission: 'admin' as PermissionLevel,
+      permission: PermissionLevel.Admin,
     };
 
     const task = new CreateInvitationTask(actor, invitationService, memberService, {

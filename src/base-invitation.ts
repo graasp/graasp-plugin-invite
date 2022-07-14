@@ -1,4 +1,4 @@
-import { PermissionLevel } from 'graasp';
+import { PermissionLevel } from '@graasp/sdk';
 
 import Invitation from './interfaces/invitation';
 

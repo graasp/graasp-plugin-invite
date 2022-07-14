@@ -1,26 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { GraaspError, GraaspErrorDetails } from 'graasp';
+import { BaseGraaspError } from '@graasp/sdk';
 
-export class GraaspInvitationError implements GraaspError {
-  name: string;
-  code: string;
-  statusCode?: number;
-  message: string;
-  data?: unknown;
-  origin: 'core' | 'plugin';
+import { PLUGIN_NAME } from './constants';
 
-  constructor({ code, statusCode, message }: GraaspErrorDetails, data?: unknown) {
-    this.name = code;
-    this.code = code;
-    this.message = message;
-    this.statusCode = statusCode;
-    this.data = data;
-    this.origin = 'plugin';
-  }
-}
-
-export class DuplicateInvitationError extends GraaspInvitationError {
+export class DuplicateInvitationError extends BaseGraaspError {
+  origin = PLUGIN_NAME;
   constructor(data?: unknown) {
     super(
       {
@@ -33,7 +18,8 @@ export class DuplicateInvitationError extends GraaspInvitationError {
   }
 }
 
-export class MemberAlreadyExistForEmailError extends GraaspInvitationError {
+export class MemberAlreadyExistForEmailError extends BaseGraaspError {
+  origin = PLUGIN_NAME;
   constructor(data?: unknown) {
     super(
       {

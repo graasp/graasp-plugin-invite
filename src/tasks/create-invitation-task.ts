@@ -1,6 +1,6 @@
 import { UniqueIntegrityConstraintViolationError } from 'slonik';
 
-import { Actor, DatabaseTransactionHandler, Item, MemberService } from 'graasp';
+import { Actor, DatabaseTransactionHandler, Item, MemberService, TaskStatus } from '@graasp/sdk';
 
 import { BaseInvitation } from '../base-invitation';
 import { InvitationService } from '../db-service';
@@ -40,7 +40,7 @@ class CreateInvitationTask extends BaseTask<Actor, Invitation> {
   }
 
   async run(handler: DatabaseTransactionHandler): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     const { invitation, item } = this.input;
 
@@ -68,7 +68,7 @@ class CreateInvitationTask extends BaseTask<Actor, Invitation> {
       throw e;
     }
 
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }
 
