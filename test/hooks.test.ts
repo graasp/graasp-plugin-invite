@@ -1,8 +1,7 @@
 import { FastifyLoggerInstance } from 'fastify';
 
 import { DatabaseTransactionHandler, MemberTaskManager } from '@graasp/sdk';
-import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
-import Runner from 'graasp-test/src/tasks/taskRunner';
+import { ItemMembershipTaskManager, ItemTaskManager, TaskRunner as Runner } from 'graasp-test';
 
 import build from './app';
 import { FIXTURES_INVITATIONS, FIXTURE_MEMBER, GRAASP_ACTOR } from './fixtures';

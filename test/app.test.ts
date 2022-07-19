@@ -1,8 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { MemberTaskManager, PermissionLevel } from '@graasp/sdk';
-import { ItemMembershipTaskManager, ItemTaskManager } from 'graasp-test';
-import Runner from 'graasp-test/src/tasks/taskRunner';
+import { ItemMembershipTaskManager, ItemTaskManager, TaskRunner as Runner } from 'graasp-test';
 
 import build from './app';
 import { FIXTURES_INVITATIONS, FIXTURE_ITEM, MockError } from './fixtures';
