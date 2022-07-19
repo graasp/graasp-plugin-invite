@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { BaseGraaspError } from '@graasp/sdk';
+import { ErrorFactory } from '@graasp/sdk';
 
 import { PLUGIN_NAME } from './constants';
 
-export class DuplicateInvitationError extends BaseGraaspError {
-  origin = PLUGIN_NAME;
+export const GraaspError = ErrorFactory(PLUGIN_NAME);
+
+export class DuplicateInvitationError extends GraaspError {
   constructor(data?: unknown) {
     super(
       {
@@ -18,8 +19,7 @@ export class DuplicateInvitationError extends BaseGraaspError {
   }
 }
 
-export class MemberAlreadyExistForEmailError extends BaseGraaspError {
-  origin = PLUGIN_NAME;
+export class MemberAlreadyExistForEmailError extends GraaspError {
   constructor(data?: unknown) {
     super(
       {
