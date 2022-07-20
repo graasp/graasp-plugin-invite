@@ -1153,9 +1153,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/sdk@github:graasp/graasp-utils#15/testUtils":
+"@graasp/sdk@github:graasp/graasp-sdk":
   version: 0.1.0
-  resolution: "@graasp/sdk@https://github.com/graasp/graasp-utils.git#commit=4b1cc0b372be2daf27b194d16c3527cceb2cccf7"
+  resolution: "@graasp/sdk@https://github.com/graasp/graasp-sdk.git#commit=513b28bc7081aca26ab55088eb12618f51eff922"
   dependencies:
     "@fastify/secure-session": 5.2.0
     aws-sdk: 2.1111.0
@@ -1166,13 +1166,6 @@ __metadata:
     slonik: 28.1.1
     uuid: 8.3.2
   checksum: b8e2d75f7a35aa3550bcf54aa998e5bb1738447095b4ee26102cf354e748399532ac4518f22a64c2f11d6cba82196dca3cace4256d16fafee0c548885f818193
-  languageName: node
-  linkType: hard
-
-"@graasp/utils@github:graasp/graasp-utils.git":
-  version: 0.1.0
-  resolution: "@graasp/utils@https://github.com/graasp/graasp-utils.git#commit=e31e4065909a253e20082d2fea34cad466a11b83"
-  checksum: cf448e4cb02b13dad1f6f790bd09860a63ca087ce83888e38a3882e73c918b345247f70ee014fff9982a0b853627df7d0fdef5e16e7c98896ad82347223aa689
   languageName: node
   linkType: hard
 
@@ -4047,14 +4040,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graasp-repo@workspace:.":
+"graasp-plugin-invitations@workspace:.":
   version: 0.0.0-use.local
-  resolution: "graasp-repo@workspace:."
+  resolution: "graasp-plugin-invitations@workspace:."
   dependencies:
     "@commitlint/cli": ^16.2.4
     "@commitlint/config-conventional": ^16.2.4
-    "@graasp/sdk": "github:graasp/graasp-utils#15/testUtils"
-    "@graasp/utils": "github:graasp/graasp-utils.git"
+    "@graasp/sdk": "github:graasp/graasp-sdk"
     "@trivago/prettier-plugin-sort-imports": 3.2.0
     "@types/jest": 27.4.1
     "@typescript-eslint/eslint-plugin": 5.21.0
@@ -4063,7 +4055,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     fastify: ^3.29.1
     graasp-mailer: "github:graasp/graasp-mailer.git"
-    graasp-test: "github:graasp/graasp-test#23/sdk"
+    graasp-test: "github:graasp/graasp-test"
     http-status-codes: 2.2.0
     husky: 7.0.4
     jest: 27.5.1
@@ -4076,12 +4068,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"graasp-test@github:graasp/graasp-test#23/sdk":
+"graasp-test@github:graasp/graasp-test":
   version: 0.1.0
-  resolution: "graasp-test@https://github.com/graasp/graasp-test.git#commit=9282475d25c770aa53b78a158644d4d714230066"
+  resolution: "graasp-test@https://github.com/graasp/graasp-test.git#commit=3ff1f7951d1c2439f84fab546bf8de60b530bd1c"
   dependencies:
     uuid: 8.3.2
-  checksum: d30e28e785e245ec15335595661cf1ec9b228ab75b99977d0ded48c037d73404099adab4c2d1c79d9970480613837c4d05989d65434deb4884ae7c846281818f
+  checksum: aaa3759fe2842de03fdc99011623dced835636fe5e15598c8574b9d526c040615dac3bf06fd351007a07d267493f9cd4e70c14ef35b0b73fb2810f90be4bbae8
   languageName: node
   linkType: hard
 
@@ -7820,7 +7812,7 @@ __metadata:
 
 "typescript@patch:typescript@4.6.4#~builtin<compat/typescript>":
   version: 4.6.4
-  resolution: "typescript@patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=bda367"
+  resolution: "typescript@patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
@@ -7830,7 +7822,7 @@ __metadata:
 
 "typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>":
   version: 4.5.4
-  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=bda367"
+  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
