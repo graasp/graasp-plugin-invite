@@ -4,9 +4,9 @@ import { ErrorFactory } from '@graasp/sdk';
 
 import { PLUGIN_NAME } from './constants';
 
-export const GraaspError = ErrorFactory(PLUGIN_NAME);
+export const GraaspInvitationsError = ErrorFactory(PLUGIN_NAME);
 
-export class DuplicateInvitationError extends GraaspError {
+export class DuplicateInvitationError extends GraaspInvitationsError {
   constructor(data?: unknown) {
     super(
       {
@@ -19,7 +19,7 @@ export class DuplicateInvitationError extends GraaspError {
   }
 }
 
-export class MemberAlreadyExistForEmailError extends GraaspError {
+export class MemberAlreadyExistForEmailError extends GraaspInvitationsError {
   constructor(data?: unknown) {
     super(
       {
