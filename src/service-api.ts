@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { FastifyPluginAsync } from 'fastify';
 
-import { Actor, IdParam, Member } from 'graasp';
+import { Actor, IdParam, Member } from '@graasp/sdk';
 import mailerPlugin from 'graasp-mailer';
 
 import { InvitationService } from './db-service';

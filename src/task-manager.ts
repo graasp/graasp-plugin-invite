@@ -4,10 +4,10 @@ import {
   ItemMembershipTaskManager,
   ItemTaskManager,
   MemberService,
+  PermissionLevel,
   Task,
-} from 'graasp';
+} from '@graasp/sdk';
 
-import { PermissionLevel } from './constants';
 import { InvitationService } from './db-service';
 import Invitation from './interfaces/invitation';
 import CreateInvitationTask from './tasks/create-invitation-task';

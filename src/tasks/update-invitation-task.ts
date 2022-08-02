@@ -1,4 +1,4 @@
-import { Actor, DatabaseTransactionHandler } from 'graasp';
+import { Actor, DatabaseTransactionHandler, TaskStatus } from '@graasp/sdk';
 
 import { InvitationService } from '../db-service';
 import Invitation from '../interfaces/invitation';
@@ -28,13 +28,13 @@ class UpdateInvitationTask extends BaseTask<Actor, Invitation> {
   }
 
   async run(handler: DatabaseTransactionHandler): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     const { invitation, id } = this.input;
 
     this._result = await this.invitationService.update(id, invitation, handler);
 
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }
 

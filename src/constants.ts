@@ -1,5 +1,1 @@
-export const enum PermissionLevel {
-  Read = 'read',
-  Write = 'write',
-  Admin = 'admin',
-}
+export const PLUGIN_NAME = 'graasp-plugin-invitations';

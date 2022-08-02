@@ -1,4 +1,4 @@
-import { PermissionLevel } from 'graasp';
+import { PermissionLevel } from '@graasp/sdk';
 
 interface Invitation {
   id: string;

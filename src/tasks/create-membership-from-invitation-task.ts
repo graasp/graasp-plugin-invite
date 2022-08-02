@@ -1,4 +1,4 @@
-import { Actor, DatabaseTransactionHandler, ItemMembership } from 'graasp';
+import { Actor, DatabaseTransactionHandler, ItemMembership, TaskStatus } from '@graasp/sdk';
 
 import { InvitationService } from '../db-service';
 import Invitation from '../interfaces/invitation';
@@ -27,7 +27,7 @@ class CreateMembershipFromInvitationTask extends BaseTask<Actor, ItemMembership>
   }
 
   async run(handler: DatabaseTransactionHandler): Promise<void> {
-    this.status = 'RUNNING';
+    this.status = TaskStatus.RUNNING;
 
     const { invitation, memberId } = this.input;
 
@@ -43,7 +43,7 @@ class CreateMembershipFromInvitationTask extends BaseTask<Actor, ItemMembership>
     // remove invitation once membership is created
     await this.invitationService.delete(invitation.id, handler);
 
-    this.status = 'OK';
+    this.status = TaskStatus.OK;
   }
 }
 

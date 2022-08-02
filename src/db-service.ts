@@ -1,6 +1,6 @@
 import { DatabaseTransactionConnection as TrxHandler, sql } from 'slonik';
 
-import { ItemMembership } from 'graasp';
+import { ItemMembership } from '@graasp/sdk';
 
 import { BaseInvitation } from './base-invitation';
 import Invitation from './interfaces/invitation';
