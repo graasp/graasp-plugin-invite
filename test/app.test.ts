@@ -53,9 +53,7 @@ describe('Invitation Plugin', () => {
       expect(await response.json()).toEqual(FIXTURES_INVITATIONS);
 
       // check email got sent
-      setTimeout(() => {
-        expect(mockSendMail).toHaveBeenCalledTimes(FIXTURES_INVITATIONS.length);
-      }, 2000);
+      expect(mockSendMail).toHaveBeenCalledTimes(FIXTURES_INVITATIONS.length);
     });
 
     it('throw if id is invalid', async () => {

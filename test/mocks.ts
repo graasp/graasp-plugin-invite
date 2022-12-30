@@ -1,12 +1,21 @@
+import { ItemMembershipService } from '@graasp/sdk';
 import { Task as MockTask } from 'graasp-test';
 
 import { InvitationService } from '../src/db-service';
 import InvitationTaskManager from '../src/task-manager';
+import CreateMembershipFromInvitationTask from '../src/tasks/create-membership-from-invitation-task';
+import { FIXTURES_INVITATIONS, FIXTURE_MEMBERSHIP } from './fixtures';
 
 export const mockCreateMembershipFromInvitationTask = (runner, data) => {
-  return jest
-    .spyOn(InvitationTaskManager.prototype, 'createCreateMembershipFromInvitationTask')
-    .mockImplementation(() => data);
+  const mockCreateMembership = jest
+    .spyOn(InvitationService.prototype, 'createMembership')
+    .mockImplementation((partialMember, handler) => Promise.resolve(FIXTURE_MEMBERSHIP));
+
+  const mockDelete = jest
+    .spyOn(InvitationService.prototype, 'delete')
+    .mockImplementation((id, handler) => Promise.resolve(FIXTURES_INVITATIONS[0]));
+
+  return [mockCreateMembership, mockDelete];
 };
 
 export const mockGetForMember = (data) => {

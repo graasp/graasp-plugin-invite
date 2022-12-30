@@ -41,13 +41,13 @@ describe('Hooks', () => {
       const filteredInvitations = invitations.filter(
         (invitation) => invitation.email === member.email,
       );
-      const mock = mockCreateMembershipFromInvitationTask(runner, invitations);
+      const mocks = mockCreateMembershipFromInvitationTask(runner, invitations);
       mockGetForMember(filteredInvitations);
 
       jest.spyOn(runner, 'setTaskPostHookHandler').mockImplementation(async (name, fn) => {
         if (name === memberTaskManager.getCreateTaskName()) {
           await fn(member, actor, { handler, log });
-          expect(mock).toHaveBeenCalledTimes(filteredInvitations.length);
+          mocks.forEach(mock => expect(mock).toHaveBeenCalledTimes(filteredInvitations.length));
         }
       });
 
@@ -59,13 +59,13 @@ describe('Hooks', () => {
       const filteredInvitations = invitations.filter(
         (invitation) => invitation.email === member.email,
       );
-      const mock = mockCreateMembershipFromInvitationTask(runner, invitations);
+      const mocks = mockCreateMembershipFromInvitationTask(runner, invitations);
       mockGetForMember(filteredInvitations);
 
       jest.spyOn(runner, 'setTaskPostHookHandler').mockImplementation(async (name, fn) => {
         if (name === memberTaskManager.getCreateTaskName()) {
           await fn(member, actor, { handler, log });
-          expect(mock).toHaveBeenCalledTimes(filteredInvitations.length);
+          mocks.forEach(mock => expect(mock).toHaveBeenCalledTimes(filteredInvitations.length));
         }
       });
 

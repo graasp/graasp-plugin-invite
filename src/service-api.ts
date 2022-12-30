@@ -50,7 +50,7 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
   const createCreateTaskName = mTM.getCreateTaskName();
   runner.setTaskPostHookHandler(
     createCreateTaskName,
-    async (member: Member, _actor, { handler }) => {
+    async (member: Member, _actor, { handler, log }) => {
       // replace invitations to memberships
       const invitations = await dbService.getForMember(member.email, handler);
       if (invitations.length) {
@@ -60,8 +60,9 @@ const basePlugin: FastifyPluginAsync<GraaspPluginInvitationsOptions> = async (fa
             memberId: member.id,
           }),
         );
-        // don't need to wait
-        runner.runMultiple(tasks);
+        // don't need to await
+        // reuse handler of transaction (avoid creating additional connections)
+        tasks.forEach(t =>t.run(handler, log));
       }
     },
   );
