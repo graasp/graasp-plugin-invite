@@ -24,12 +24,12 @@ export const buildInvitation = ({
 }): Invitation => ({
   id: v4(),
   itemPath,
-  creator: 'fake-creator',
+  creator: '12345678-1234-4567-abcd-123456789012',
   name: name ?? 'fake-name',
   email: email ?? 'fake-email@mail.com',
   permission: permission ?? PermissionLevel.Read,
-  createdAt: Date.now().toString(),
-  updatedAt: Date.now().toString(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 });
 
 const itemId = v4();
@@ -50,7 +50,7 @@ export const FIXTURE_MEMBERSHIP: ItemMembership = {
   permission: PermissionLevel.Read,
   creator: 'mock-creator',
   createdAt: 'mock-created-at',
-  updatedAt: 'mock-updated-at'
+  updatedAt: 'mock-updated-at',
 };
 export const FIXTURES_INVITATIONS = [
   buildInvitation({ itemPath, ...FIXTURE_MEMBER }),
