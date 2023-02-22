@@ -41,12 +41,12 @@ class InvitationTaskManager {
     return CreateInvitationTask.name;
   }
 
-  private getTaskAndWriteMembershipSequence(member, itemId): Task<Actor, unknown>[] {
+  private getTaskAndAdminMembershipSequence(member, itemId): Task<Actor, unknown>[] {
     const t1 = this.itemTaskManager.createGetTask(member, itemId);
     const t2 = this.itemMembershipTaskManager.createGetMemberItemMembershipTask(member);
     t2.getInput = () => ({
       item: t1.result,
-      validatePermission: PermissionLevel.Write,
+      validatePermission: PermissionLevel.Admin,
     });
 
     return [t1, t2];
@@ -56,7 +56,7 @@ class InvitationTaskManager {
     member: Actor,
     data: { itemId: string; invitation: Partial<Invitation> },
   ): Task<Actor, unknown>[] {
-    const [getItemTask, t2] = this.getTaskAndWriteMembershipSequence(member, data.itemId);
+    const [getItemTask, t2] = this.getTaskAndAdminMembershipSequence(member, data.itemId);
     const t3 = new CreateInvitationTask(member, this.invitationService, this.memberService);
     t3.getInput = () => ({
       ...data,
@@ -66,7 +66,7 @@ class InvitationTaskManager {
   }
 
   createGetforItemTaskSequence(member: Actor, data: { itemId: string }): Task<Actor, unknown>[] {
-    const [getItemTask, t2] = this.getTaskAndWriteMembershipSequence(member, data.itemId);
+    const [getItemTask, t2] = this.getTaskAndAdminMembershipSequence(member, data.itemId);
     const t3 = new GetInvitationsForItemTask(member, this.invitationService);
     t3.getInput = () => ({
       ...data,
@@ -90,7 +90,7 @@ class InvitationTaskManager {
     member: Actor,
     data: { itemId: string; invitationId: string; body: Partial<Invitation> },
   ): Task<Actor, unknown>[] {
-    const tasks = this.getTaskAndWriteMembershipSequence(member, data.itemId);
+    const tasks = this.getTaskAndAdminMembershipSequence(member, data.itemId);
     const t3 = new UpdateInvitationTask(member, this.invitationService, {
       id: data.invitationId,
       invitation: data.body,
@@ -102,7 +102,7 @@ class InvitationTaskManager {
     member: Actor,
     data: { itemId: string; invitationId: string },
   ): Task<Actor, unknown>[] {
-    const tasks = this.getTaskAndWriteMembershipSequence(member, data.itemId);
+    const tasks = this.getTaskAndAdminMembershipSequence(member, data.itemId);
     const t3 = new DeleteInvitationTask(member, this.invitationService, { id: data.invitationId });
     return [...tasks, t3];
   }
